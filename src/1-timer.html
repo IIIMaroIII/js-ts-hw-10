@@ -10,6 +10,26 @@
 		<ul class="nav-list">
 			<li class="nav-item"><a href="./index.html" class="nav-link">Go back</a></li>
 		</ul>
-		<script type="module" src="./main.ts"></script>
+		<input type="text" name="cal" data-cal />
+		<button type="button" class="start-btn" data-startBtn>Start</button>
+		<div class="info" data-info="">
+			<div class="field">
+				<span class="value" data-days>00</span>
+				<span class="label">Days</span>
+			</div>
+			<div class="field">
+				<span class="value" data-hours>00</span>
+				<span class="label">Hours</span>
+			</div>
+			<div class="field">
+				<span class="value" data-minutes>00</span>
+				<span class="label">Minutes</span>
+			</div>
+			<div class="field">
+				<span class="value" data-seconds>00</span>
+				<span class="label">Seconds</span>
+			</div>
+		</div>
+		<script type="module" src="./ts/1-timer.ts"></script>
 	</body>
 </html>
