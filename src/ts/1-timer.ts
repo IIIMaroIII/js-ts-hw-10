@@ -1,5 +1,7 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+
+interface ITimer {}
 interface Refs {
 	cal: HTMLInputElement | null;
 	startBtn: HTMLButtonElement | null;
@@ -21,4 +23,8 @@ const refs: Refs = {
 if (refs.cal) {
 	const fp = flatpickr(refs.cal, {});
 	console.log(fp);
+}
+
+export default class Timer implements ITimer {
+	constructor() {}
 }
