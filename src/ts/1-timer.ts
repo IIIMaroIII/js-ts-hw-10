@@ -1,30 +1,49 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
-interface ITimer {}
-interface Refs {
-	cal: HTMLInputElement | null;
+interface ITimer {
+	readonly refs: Refs;
+	timerId: number | null;
+
+	init(): void;
+	convertMs(ms: number): TimerUI;
+	initFlatpickr(): void;
+}
+
+type Refs = {
+	input: HTMLInputElement | null;
 	startBtn: HTMLButtonElement | null;
 	days: HTMLSpanElement | null;
 	hours: HTMLSpanElement | null;
 	min: HTMLSpanElement | null;
-	secs: HTMLSpanElement | null;
-}
-
-const refs: Refs = {
-	cal: document.querySelector<HTMLInputElement>('[data-cal]') ?? null,
-	startBtn: document.querySelector<HTMLButtonElement>('[data-startBtn]') ?? null,
-	days: document.querySelector<HTMLSpanElement>('[data-days]') ?? null,
-	hours: document.querySelector<HTMLSpanElement>('[data-hours]') ?? null,
-	min: document.querySelector<HTMLSpanElement>('[data-minutes]') ?? null,
-	secs: document.querySelector<HTMLSpanElement>('[data-seconds]') ?? null,
+	sec: HTMLSpanElement | null;
+};
+type TimerUI = {
+	days: number;
+	hours: number;
+	min: number;
+	sec: number;
+};
+type TimerOptions = {
+	rootSelector: HTMLElement | null;
 };
 
-if (refs.cal) {
-	const fp = flatpickr(refs.cal, {});
-	console.log(fp);
-}
-
 export default class Timer implements ITimer {
-	constructor() {}
+	refs: Refs;
+	timerId: number | null;
+
+	constructor({ rootSelector }: TimerOptions) {
+		this.refs = {
+			input: rootSelector?.querySelector<HTMLInputElement>('[data-cal]') ?? null,
+			startBtn: rootSelector?.querySelector<HTMLButtonElement>('[data-startBtn]') ?? null,
+			days: rootSelector?.querySelector<HTMLSpanElement>('[data-days]') ?? null,
+			hours: rootSelector?.querySelector<HTMLSpanElement>('[data-hours]') ?? null,
+			min: rootSelector?.querySelector<HTMLSpanElement>('[data-minutes]') ?? null,
+			sec: rootSelector?.querySelector<HTMLSpanElement>('[data-seconds]') ?? null,
+		};
+		this.timerId = null;
+	}
+	init(): void {}
+	convertMs(ms: number): TimerUI {}
+	initFlatpickr(): void {}
 }
