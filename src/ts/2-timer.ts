@@ -106,9 +106,9 @@ class Timer implements ITimer {
 			return true;
 		}
 	}
-	private setDisableElStatus(btn: HTMLElement, value: boolean) {
-		if (btn) {
-			btn.disabled = value;
+	private setDisableElStatus(el: HTMLInputElement | HTMLButtonElement, value: boolean) {
+		if (el) {
+			el.disabled = value;
 		}
 	}
 	private convertMS(ms: number): FormattedDate {
