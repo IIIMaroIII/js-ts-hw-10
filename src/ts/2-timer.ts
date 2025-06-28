@@ -1,8 +1,11 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import 'izitoast/dist/css/iziToast.min.css';
 import type { Instance } from 'flatpickr/dist/types/instance';
 import type { Options } from 'flatpickr/dist/types/options';
+import iziToast, { type IziToast, type IziToastSettings } from 'izitoast';
 
+type ToastMethods = 'success' | 'error' | 'warning' | 'info';
 interface Refs {
 	input: HTMLInputElement;
 	startBtn: HTMLButtonElement;
@@ -24,18 +27,21 @@ interface FormattedDate {
 
 interface TimerOptions {
 	fpOptions?: Options;
+	iziSettings?: IziToastSettings;
 }
 
 class Timer implements ITimer {
 	private timerID: number;
 	private timeDiff: number;
-	private options: Options;
+	private fpOptions: Options;
+	private iziSettings: IziToastSettings;
 	private readonly refs: Refs;
 
-	constructor({ fpOptions = {} }: TimerOptions = {}) {
+	constructor({ fpOptions = {}, iziSettings = {} }: TimerOptions = {}) {
 		this.timerID = 0;
 		this.timeDiff = 0;
-		this.options = fpOptions;
+		this.fpOptions = fpOptions;
+		this.iziSettings = iziSettings;
 		this.refs = {
 			input: this.getRef<HTMLInputElement>('[data-cal]'),
 			startBtn: this.getRef<HTMLButtonElement>('[data-startBtn]'),
@@ -47,7 +53,7 @@ class Timer implements ITimer {
 	}
 	init(): void {
 		this.refs.startBtn.addEventListener('click', () => this.start());
-		this.initFlatpickr(this.refs.input, this.options);
+		this.initFlatpickr(this.refs.input, this.fpOptions);
 	}
 	private start(): void {
 		this.timerID = setInterval(() => {
@@ -64,6 +70,9 @@ class Timer implements ITimer {
 	private stop(): void {
 		clearInterval(this.timerID);
 		this.setDisableElStatus(this.refs.input, false);
+	}
+	private toast(method: ToastMethods, options?: IziToastSettings): void {
+		iziToast[method]({ ...options });
 	}
 	private updateUI(ms: number): void {
 		const { days, hours, minutes, seconds } = this.convertMS(ms);
@@ -98,7 +107,12 @@ class Timer implements ITimer {
 	}
 	private validatePastTimeAndDisableBtn(time: number): Boolean {
 		if (time < 0) {
-			alert('Please choose the time in the future');
+			this.toast('error', {
+				message: 'Choose the date in the future',
+				messageColor: 'red',
+				closeOnClick: true,
+				closeOnEscape: true,
+			});
 			this.setDisableElStatus(this.refs.startBtn, true);
 			return false;
 		} else {
