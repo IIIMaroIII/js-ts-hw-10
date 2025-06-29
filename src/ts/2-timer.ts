@@ -72,7 +72,7 @@ class Timer implements ITimer {
 		this.setDisableElStatus(this.refs.input, false);
 	}
 	private toast(method: ToastMethods, options?: IziToastSettings): void {
-		iziToast[method]({ ...options });
+		iziToast[method]({ ...options, ...this.iziSettings });
 	}
 	private updateUI(ms: number): void {
 		const { days, hours, minutes, seconds } = this.convertMS(ms);
@@ -144,5 +144,7 @@ class Timer implements ITimer {
 		return { days, hours, minutes, seconds };
 	}
 }
-const timerInstance = new Timer({});
+const timerInstance = new Timer({
+	iziSettings: { maxWidth: 300, transitionIn: 'fadeInLeft', transitionOut: 'fadeOutRight' },
+});
 timerInstance.init();
